@@ -124,7 +124,7 @@ Wait, what? Yes that's the email I want to use because I will eventually want to
 
 Now is a good time to start up the Android Studio IDE and open the project. Android Studio, my version is 3.3, is still a rather strange beast to me. It likes to hide a lot of the files from the Project window. I can see the sense of hiding files I never want to see (such as .gitignore and the .idea directory) but it also hides the source, which is just weird. However it does have a setting which shows *all* the files, including .gitignore and .idea, that's 'Project Files' at the top left.
 
-<img src="ProjectFiles.png" width="800px"/>
+<img src="images/ProjectFiles.png" width="800px"/>
 
 This will build all right but it doesn't meet all my original goals so let's tackle those now. I need to add lots of things to the build.gradle file. First the plugins section. It needs to look like this:
 ```
@@ -396,5 +396,5 @@ It then invokes two more steps which invoke publishing to nexus and then closing
 
 So now, whenever I push the kotlin-library-template Travis-ci will kick off a build and verify it works, including passing tests. If I tag it with a version number it will build and publish the current source with that version number embedded.
 
-There is a slight hole in this in that I don't have to update the version number when I release, I only have to tag. So someone might pull the code and look at the version number and be confused. But there are lots of other places I need to edit the version number during a rlease such as the release notes etc. I can cope with one more.
+There is a slight hole in this in that I don't have to update the version number when I release, I only have to tag. So if I forget to update the version number in build.gradle and someone pulls the code and looks at the version number they could be confused. But there are lots of other places I need to edit the version number during a rlease such as the release notes etc. I can cope with one more.
 
