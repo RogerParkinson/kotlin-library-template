@@ -17,10 +17,10 @@ Still, the task is fundamentally the same.
 Initially I can ignore the IDE and just use Gradle from the command line, but I do have to install it.
 Instructions are [here](https://linuxize.com/post/how-to-install-gradle-on-ubuntu-18-04/) for Ubuntu, which is what I am using. But the sequence is simple enough.
 I already had Java installed, which is a prerequisite, so I only had to download Gradle
-
+```
 wget https://services.gradle.org/distributions/gradle-5.3.1-bin.zip -P /tmp
 sudo unzip -d /opt/gradle /tmp/gradle-*.zip
-
+```
 That puts the files under /opt/gradle/gradle-5.3.1. Now there's a little bit of editing:
 
 `sudo vi /etc/profile.d/gradle.sh`
@@ -38,11 +38,9 @@ gradle -v
 ```
 The last one should announce Gradle's version number etc. Mine looks like this:
 
-
-`------------------------------------------------------------`
-`Gradle 5.3.1`
-`------------------------------------------------------------`
 ```
+Gradle 5.3.1
+
 Build time:   2019-03-28 09:09:23 UTC
 Revision:     f2fae6ba563cfb772c8bc35d31e43c59a5b620c3
 
@@ -53,7 +51,6 @@ JVM:          1.8.0_45 (Oracle Corporation 25.45-b02)
 OS:           Linux 4.15.0-46-generic amd64
 ```
 So, with Gradle installed I can create my initial project which I'll call Library. I'll create a directory for it first
-
 ```
 mkdir kotlin-library-template
 cd kotlin-library-template
@@ -74,7 +71,6 @@ Source package (default: kotlin.library.template): nz.co.senanque.library
 BUILD SUCCESSFUL in 2m 11s
 2 actionable tasks: 2 executed
 ```
-
 I chose option 1 for the script DSL because I found more useful samples to copy from in that format. You can use either, of course, but they are different.
 
 What this generates is a Gradle project with a sample source file and a sample test that calls it. The gradlew commands are in place, so is a build.gradle and a settings.gradle file. There is a .gitignore file there too which tells git to exclude the build directory and the .gradle directory. Because I plan to use Android Studio I edited it to exclude the following:
@@ -120,20 +116,17 @@ The .gitignore and .gradle entries are not shown but they are there. What is not
 `git init`
 
 And now we have a local git repository. I have found when committing with Android Studio it needs a user name and email set up. I use something like this:
-
 ```
 git config user.name RogerParkinson
 git config user.email 3478501+RogerParkinson@users.noreply.github.com
 ```
-
 Wait, what? Yes that's the email I want to use because I will eventually want to push this project to a github repository. [Github recommend](https://help.github.com/en/articles/about-commit-email-addresses) that you keep your real address private and they generate a no-reply email address they associate with your login there. Thats mine. It doesn't accept emails, but when I use it in a commit Github knows it is me. At this stage I create my github repository and push the files up there. I also added a Readme.md file.
 
 Now is a good time to start up the Android Studio IDE and open the project. Android Studio, my version is 3.3, is still a rather strange beast to me. It likes to hide a lot of the files from the Project window. I can see the sense of hiding files I never want to see (such as .gitignore and the .idea directory) but it also hides the source, which is just weird. However it does have a setting which shows *all* the files, including .gitignore and .idea, that's 'Project Files' at the top left.
 
-<image href="ProjectFiles.png"/>
+<img href="ProjectFiles.png"/>
 
 This will build all right but it doesn't meet all my original goals so let's tackle those now. I need to add lots of things to the build.gradle file. First the plugins section. It needs to look like this:
-
 ```
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin on the JVM.
@@ -165,9 +158,7 @@ repositories {
     mavenCentral()
 }
 ```
-That is so far unchanged from the generated code, but if I need other repositories such as MavenCentral, then that's where they go.
-
-My dependencies are also unchanged so far:
+My actual dependencies are unchanged so far:
 ```
 dependencies {
     // Use the Kotlin JDK 8 standard library.
@@ -193,7 +184,7 @@ task dokkaJar(type: Jar, dependsOn: dokka) {
 }
 
 dokka {
-    outputFormat = 'html'
+    outputFormat = 'javadoc'
     outputDirectory = javadoc.destinationDir
 }
 ```
@@ -350,11 +341,11 @@ and I no longer need to log into Sonatype to finish things off. This is importan
 
 Travis will trigger when I push to github, as long as I tell Github and Travis what I want. First I need to go into travis-ci and create a repository. Travis-ci already knows about all my github repositories because I pointed it at github when I registered. I can just tell it to start listening for changes to my github repository that holds my kotlin-library-template project:
 
-<image href="images/travis-ci1.png"/>
+<img href="images/travis-ci1.png"/>
 
 I open settings and make it look like this (which is the default)
 
-<image href="images/travis-ci2.png"/>
+<img href="images/travis-ci2.png"/>
 
 Next I have to create the script for Travis-ci to run, and that will need some environment variables. This is quite tricky because I need to sign my artifacts and I don't have my gpg configuration with my keys etc installed on the virtual machine that Travis-ci will spin up for me. It is really important that I don't copy that information somewhere public or anyone can sign my files as me, with obvious security problems. What to do?
 
@@ -400,7 +391,7 @@ The install section is my basic script that runs the build and checks that it wo
 So far everything in here will run whenever I do a git push to the repository.
 
 The last section only runs when I *tag* the repository. So I might tag it with "1.2.3" and that will trigger this script, normal pushes won't trigger it.
-What it does is run another build, this time without running the tests which is safe because we just established that are working in the instal phase.
+What it does is run another build, this time without running the tests which is safe because we just established that are working in the install phase.
 It then invokes two more steps which invoke publishing to nexus and then closing the repository when it is finished. The publishToNexus invokes the rest of the publish functionality so I get pom generation, cusomisation, signing etc all invoked from that. Remember the version dance back atthe beginning. That code took the hard coded version, but it also examined the TRAVIS_TAG environment variable and used that if it had a value. That is set by Travis-ci if the build was triggered by setting a tag and it contains the tag.
 
 So now, whenever I push the kotlin-library-template Travis-ci will kick off a build and verify it works, including passing tests. If I tag it with a version number it will build and publish the current source with that version number embedded.
