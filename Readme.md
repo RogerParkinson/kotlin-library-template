@@ -124,7 +124,7 @@ Wait, what? Yes that's the email I want to use because I will eventually want to
 
 Now is a good time to start up the Android Studio IDE and open the project. Android Studio, my version is 3.3, is still a rather strange beast to me. It likes to hide a lot of the files from the Project window. I can see the sense of hiding files I never want to see (such as .gitignore and the .idea directory) but it also hides the source, which is just weird. However it does have a setting which shows *all* the files, including .gitignore and .idea, that's 'Project Files' at the top left.
 
-<img href="ProjectFiles.png"/>
+<img src="ProjectFiles.png" width="800px"/>
 
 This will build all right but it doesn't meet all my original goals so let's tackle those now. I need to add lots of things to the build.gradle file. First the plugins section. It needs to look like this:
 ```
@@ -341,11 +341,11 @@ and I no longer need to log into Sonatype to finish things off. This is importan
 
 Travis will trigger when I push to github, as long as I tell Github and Travis what I want. First I need to go into travis-ci and create a repository. Travis-ci already knows about all my github repositories because I pointed it at github when I registered. I can just tell it to start listening for changes to my github repository that holds my kotlin-library-template project:
 
-<img href="images/travis-ci1.png"/>
+<img src="images/travis-ci1.png" width="800px"/>
 
 I open settings and make it look like this (which is the default)
 
-<img href="images/travis-ci2.png"/>
+<img src="images/travis-ci2.png" width="800px"/>
 
 Next I have to create the script for Travis-ci to run, and that will need some environment variables. This is quite tricky because I need to sign my artifacts and I don't have my gpg configuration with my keys etc installed on the virtual machine that Travis-ci will spin up for me. It is really important that I don't copy that information somewhere public or anyone can sign my files as me, with obvious security problems. What to do?
 
