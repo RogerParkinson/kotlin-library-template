@@ -2,7 +2,6 @@ Sample Kotlin Library
 ==
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/nz.co.senanque/kotlin-library-template/badge.svg)](http://mvnrepository.com/artifact/nz.co.senanque/kotlin-library-template)
-
 [![build_status](https://travis-ci.org/RogerParkinson/kotlin-library-template.svg?branch=master)](https://travis-ci.org/RogerParkinson/kotlin-library-template)
 
 As part of picking up some Kotlin skills I needed to build a jar library file with Kotlin source files.
