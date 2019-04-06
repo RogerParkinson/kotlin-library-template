@@ -17,7 +17,7 @@ install: ./gradlew -info build
 
 deploy:
   provider: script
-  script: "./gradlew -Psigning.keyId=F360573B -Psigning.password=$GPG_PASSPHRASE -PnexusUsername=$SONATYPE_USERNAME -PnexusPassword=$SONATYPE_PASSWORD -x test clean build publishToNexus closeAndReleaseRepository"
+  script: "./gradlew -Psigning.keyId=F360573B -Psigning.password=$GPG_PASSPHRASE -PnexusUsername=$SONATYPE_USERNAME -PnexusPassword=$SONATYPE_PASSWORD -Psigning.secretKeyRingFile=$HOME/.gnupg/secring.gpg -x test clean build publishToNexus closeAndReleaseRepository"
   on:
     tags: true
 
