@@ -1,7 +1,7 @@
 Sample Kotlin Library
 ==
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/nz.co.senanque/kotlin-library-template/badge.svg)](http://mvnrepository.com/artifact/nz.co.senanque/kotlin-library-template)
+[![Maven Central](https://img.shields.io/maven-central/v/nz.co.senanque/kotlin-library-template.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22nz.co.senanque%22%20AND%20a:%22kotlin-library-template%22)
 [![build_status](https://travis-ci.org/RogerParkinson/kotlin-library-template.svg?branch=master)](https://travis-ci.org/RogerParkinson/kotlin-library-template)
 
 As part of picking up some Kotlin skills I needed to build a jar library file with Kotlin source files.
@@ -424,7 +424,8 @@ install: ./gradlew -info build
 
 deploy:
   provider: script
-  script: "./gradlew -x test clean build publishToNexus closeAndReleaseRepository"
+  script: "./gradlew -Psigning.keyId=F360573B -Psigning.password=$GPG_PASSPHRASE -PnexusUsername=$SONATYPE_USERNAME -PnexusPassword=$SONATYPE_PASSWORD -Psigning.secretKeyRingFile=$HOME/.gnupg/secring.gpg -x test clean build publishToNexus closeAndReleaseRepository"
+
   on:
     tags: true
 ```
@@ -446,34 +447,24 @@ def travis_tag = "$System.env.TRAVIS_TAG"
 if (travis_tag != "null") {
     version = travis_tag
 }
-
-def sonatypeUsername = "$System.env.SONATYPE_USERNAME"
-if (sonatypeUsername == "null") {
-    sonatypeUsername = project.properties["nexusUsername"]
-}
-
-def sonatypePassword = "$System.env.SONATYPE_PASSWORD"
-if (sonatypePassword == "null") {
-    sonatypePassword = project.properties["nexusPassword"]
-}
 ```
 
 And the publishing blocks change to:
 
 ```groovy
 nexusPublishing {
-    username = sonatypeUsername
-    password = sonatypePassword
+    username = project.properties["nexusUsername"]
+    password = project.properties["nexusPassword"]
 }
 
 nexusStaging {
-    username = sonatypeUsername
-    password = sonatypePassword
+    username = project.properties["nexusUsername"]
+    password = project.properties["nexusPassword"]
     packageGroup = project.getGroup()
 }
 ```
 
-Remember the version dance back atthe beginning. That code took the hard coded version, but it also examined the TRAVIS_TAG environment variable and used that if it had a value. That is set by Travis-ci if the build was triggered by setting a tag and it contains the tag.
+Now the code starts with a hard coded version but it also examines the TRAVIS_TAG environment variable and uses that if it has a value. That is set by Travis-ci if the build was triggered by setting a tag and it contains the tag.
 
 So now, whenever I push the kotlin-library-template Travis-ci will kick off a build and verify it works, including passing tests. If I tag it with a version number it will build and publish the current source with that version number embedded.
 
