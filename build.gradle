@@ -85,7 +85,7 @@ publishing {
                 packaging = 'jar'
                 name = 'My Library'
                 description = 'A concise description of my library'
-                url = 'http://www.madurasoftware.com/kotlin-library-template'
+                url = 'http://www.madurasoftware.com'
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'

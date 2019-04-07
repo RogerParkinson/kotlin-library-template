@@ -267,7 +267,7 @@ publishing {
                 packaging = 'jar'
                 name = 'My Library'
                 description = 'A concise description of my library'
-                url = 'http://www.madurasoftware.com/kotlin-library-template'
+                url = 'http://www.madurasoftware.com'
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -468,4 +468,4 @@ Now the code starts with a hard coded version but it also examines the TRAVIS_TA
 
 So now, whenever I push the kotlin-library-template Travis-ci will kick off a build and verify it works, including passing tests. If I tag it with a version number it will build and publish the current source with that version number embedded.
 
-There is a slight hole in this in that I don't have to update the version number when I release, I only have to tag. So if I forget to update the version number in build.gradle and someone pulls the code and looks at the version number they could be confused. But there are lots of other places I need to edit the version number during a rlease such as the release notes etc. I can cope with one more.
+There is a slight hole in this in that I don't have to update the version number when I release, I only have to tag. So if I forget to update the version number in build.gradle and someone pulls the code and looks at the version number they could be confused. But there are lots of other places I need to edit the version number during a release such as the release notes etc. I can cope with one more.
