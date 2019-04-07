@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "nz.co.senanque"
-version = "1.0.3"
+version = "1.0.4"
 
 def travis_tag = "$System.env.TRAVIS_TAG"
 if (travis_tag != "null") {
